@@ -4,6 +4,7 @@ Created on Mon Nov 13 15:40:18 2017
 
 @author: fms
 """
+from experiment_utils import init_experiment, save_log, save_model
 import logging
 import random
 import sys
@@ -184,7 +185,9 @@ def cold_train(file, test_num, warm_split, k):
     print("file:%s, k:%s, test_num:%s, warm_split:%s" % (file, str(k), test_num, warm_split))
 
     im = InteractiveModel(sess, rnn_size, layer_size, item_size, embedding_dim, k, lr)
-
+# 初始化路径和 Saver
+    model_dir, log_file = init_experiment("cold", test_num)
+    saver = tf.train.Saver(max_to_keep=5) # 原代码缺失此行
     sess.run(tf.global_variables_initializer())
     print(time.asctime(time.localtime(time.time())))
 
@@ -312,7 +315,10 @@ def cold_train(file, test_num, warm_split, k):
         diversity =  inter_diversity(test_inter_diversity_list)
 
         print('epoch:%d, train hr:%.4f, test: HR = %.4f, NDCG@10 = %.4f, diversity=%.4f' % (epoch, train_hit_mean, test_hit_mean, test_ndcg_mean, diversity))
-
+# 
+        save_log(log_file, epoch, train_hit_mean, test_hit_mean, test_ndcg_mean, diversity)
+        if (epoch + 1) % 10 == 0: # 每10代存一次模型
+            save_model(saver, sess, model_dir, epoch)
 
 if __name__ == "__main__":
     file = '100k'

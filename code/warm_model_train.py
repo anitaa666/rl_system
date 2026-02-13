@@ -8,7 +8,7 @@ import logging
 import random
 import sys
 from multiprocessing.pool import Pool
-
+from experiment_utils import init_experiment, save_log, save_model
 import tensorflow as tf
 import numpy as np
 import time
@@ -178,6 +178,7 @@ def warm_train(file, test_num, warm_split, k):
 
     im = EMInteractiveModel(sess, rnn_size, layer_size, item_size, embedding_dim, k, lr)
     saver = tf.train.Saver()
+    model_dir, log_file = init_experiment("warm", test_num)
     sess.run(tf.global_variables_initializer())
 
 
@@ -326,7 +327,9 @@ def warm_train(file, test_num, warm_split, k):
         diversity =  inter_diversity(test_inter_diversity_list)
 
         print('epoch:%d, train hr:%.4f, test: HR = %.4f, NDCG@10 = %.4f, diversity = %.4f' % (epoch, train_hit_mean, test_hit_mean, test_ndcg_mean, diversity))
-
+        save_log(log_file, epoch, train_hit_mean, test_hit_mean, test_ndcg_mean, diversity)
+        if (epoch + 1) % 10 == 0:
+            save_model(saver, sess, model_dir, epoch)
 
 
 
