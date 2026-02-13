@@ -1,3 +1,7 @@
+import tensorflow as tf  # <--- 之前缺少这一行
+import numpy as np       # <--- 之前可能也缺少这一行，DQNU 也用到了 np
+from common.config import Config # <--- 保留这个
+
 class DQNU(object):
     def __init__(self, config, user_emb_val = None, scope='', sess = None):
         self.config = config

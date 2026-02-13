@@ -1,0 +1,348 @@
+import tensorflow as tf  # <--- 之前缺少这一行
+import numpy as np       # <--- 之前可能也缺少这一行，DQNU 也用到了 np
+from common.config import Config # <--- 保留这个
+import tensorflow as tf
+import numpy as np
+from common.config import Config
+# 【新增】导入刚才写的 Transformer 模块
+from models.transformer import transformer_encoder_layer, positional_encoding
+class DQNU(object):
+    def __init__(self, config, user_emb_val = None, scope='', sess = None):
+        self.config = config
+
+
+        self.init_w = tf.contrib.layers.xavier_initializer(uniform=True)
+        self.init_b = tf.constant_initializer(0.1)
+        self.global_step = tf.Variable(tf.constant(0), name="global_step", trainable=False)
+
+        user_emb_init = tf.constant_initializer(user_emb_val)
+        user_size = user_emb_val.shape[0] - 1
+        self.user_size = user_size
+        user_feature_size  = user_emb_val.shape[1]
+        self.user_feature_size = user_feature_size
+
+
+        self.scope = scope
+
+        gpu_config = tf.ConfigProto()
+        gpu_config.gpu_options.allow_growth = True
+        gpu_config.allow_soft_placement = True
+        gpu_config.intra_op_parallelism_threads = 16
+        gpu_config.inter_op_parallelism_threads = 16
+
+        if sess is None:
+          self.sess = tf.Session(config=gpu_config)
+        else:
+          self.sess = sess
+
+        
+        self.__build_placeholder()
+
+
+
+
+
+        with tf.variable_scope(self.scope +"/usemb"):
+
+          self.user_embeddings = tf.get_variable(shape=[user_size+1, user_feature_size],
+                                                     dtype=tf.float32, trainable=False, initializer=user_emb_init,
+                                                     name="user_embedding")
+
+          self.user_emb = tf.reshape(tf.nn.embedding_lookup(self.user_embeddings, self.userID), [-1, user_feature_size])
+
+
+
+        self.eval_q_value, self.user_scores = self.__build_model(self.positive_state, self.negative_state, self.user_emb,  trainable=True,
+                                                  scope=self.scope + "action/eval")
+
+        self.target_q_value, _ = self.__build_model(self.positive_state, self.negative_state, self.user_emb, trainable=False,
+                                                 scope=self.scope + "action/target")
+
+        self.eval_params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, self.scope+ 'action/eval')
+        self.target_params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, self.scope + 'action/target')
+
+
+        self.assign_ops = []
+        for e_p, t_p in zip(self.eval_params, self.target_params):
+            self.assign_ops.append(tf.assign(ref=t_p, value=e_p))
+
+
+        with tf.variable_scope("loss"):
+            
+            self.action_q = tf.batch_gather(self.eval_q_value, self.action)
+
+
+            self.critic_loss = tf.reduce_mean(tf.squared_difference(self.target_q, self.action_q))
+
+
+            self.critic_train_op = tf.train.AdamOptimizer(learning_rate=self.config.LR, epsilon=1e-8).minimize(loss=self.critic_loss,
+                                                                                                        global_step=self.global_step)
+
+            self.user_loss = tf.reduce_mean( tf.batch_gather(-tf.log(1e-6 + self.user_scores), self.userID) )
+
+            
+            self.user_train_op = tf.train.AdamOptimizer(learning_rate=self.config.LR , epsilon=1e-8).minimize(loss=self.user_loss,
+                                                                                                        global_step=self.global_step)
+            self.saver = tf.train.Saver(max_to_keep=5)
+            
+
+
+
+
+    def init_model(self):
+        self.sess.run(tf.global_variables_initializer())
+        self.update_target_params()
+
+
+
+
+
+
+    def __build_placeholder(self):
+        self.positive_state = tf.placeholder(dtype=tf.int32, shape=[None,10],
+                                             name="positive_state")
+        self.negative_state = tf.placeholder(dtype=tf.int32, shape=[None, 10],
+                                             name="nagetive_state")
+
+        self.action = tf.placeholder(dtype=tf.int32, shape=[None, 1], name="action_index")
+        self.userID = tf.placeholder(dtype=tf.int32, shape=[None, 1], name="user_id")
+        
+
+        self.target_q = tf.placeholder(dtype=tf.float32, shape=[None, 1], name="target_q")
+
+
+    def __build_state_net(self, positive_states_id, negative_states_id, user_features, items_embedding, trainable, scope):
+        
+        with tf.variable_scope(scope):
+            # 1. Embedding Lookup
+            # shape: [batch, history_size, embedding_size]
+            positive_state = tf.nn.embedding_lookup(items_embedding, positive_states_id)
+            negative_state = tf.nn.embedding_lookup(items_embedding, negative_states_id)
+
+            # 2. 【关键修改】添加位置编码 (Positional Encoding)
+            # Transformer 必须知道序列的顺序，RNN 不需要
+            positive_state = positional_encoding(positive_state, self.config.HISTORY_SIZE, self.config.EMBEDDING_SIZE)
+            negative_state = positional_encoding(negative_state, self.config.HISTORY_SIZE, self.config.EMBEDDING_SIZE)
+
+            # 3. 【关键修改】调用 Transformer Layer 替代 RNN
+            # 使用 scope 来区分正反馈和负反馈的参数，或者共用一套参数（取决于你想不想共享权重）
+            # 这里演示为“不共享权重”，分别命名 scope
+            
+            # --- 正反馈序列 ---
+            with tf.variable_scope("positive_transformer"):
+                # num_heads=2 (50/2=25)，确保整除
+                p_out = transformer_encoder_layer(
+                    inputs=positive_state, 
+                    d_model=self.config.EMBEDDING_SIZE, 
+                    num_heads=2, 
+                    is_training=trainable,
+                    scope="layer1"
+                )
+                # 如果想堆叠多层，可以在这里再调用一次 transformer_encoder_layer
+            
+            # --- 负反馈序列 ---
+            with tf.variable_scope("negative_transformer"):
+                n_out = transformer_encoder_layer(
+                    inputs=negative_state, 
+                    d_model=self.config.EMBEDDING_SIZE, 
+                    num_heads=2, 
+                    is_training=trainable,
+                    scope="layer1"
+                )
+
+            # 4. 【关键修改】获取序列的最终表示
+            # RNN 取的是最后一个时间步 (h_t)，Transformer 输出的是整个序列 [batch, seq, dim]
+            # 我们取序列的最后一个位置作为当前的 User State
+            p_features = p_out[:, -1, :] 
+            n_features = n_out[:, -1, :]
+
+            # --- 下面的代码保持不变 ---
+            # 保留原来的 Dense 层进一步提取特征
+            with tf.variable_scope("positive_feature_fc"):
+                p_features = tf.layers.dense(inputs=p_features, units=self.config.HIDDEN_LAYER_SIZE,
+                                             activation=None, kernel_initializer=self.init_w,
+                                             bias_initializer=self.init_b,
+                                             trainable=trainable, name="p_features_1")
+                p_features = tf.nn.relu(p_features)
+
+            with tf.variable_scope("negative_feature_fc"):
+                n_features = tf.layers.dense(inputs=n_features, units=self.config.HIDDEN_LAYER_SIZE,
+                                             activation=None, kernel_initializer=self.init_w,
+                                             bias_initializer=self.init_b, trainable=trainable,
+                                             name="n_features_1")
+                n_features = tf.nn.relu(n_features)
+
+            with tf.variable_scope("mix_feature"):
+                user_features = tf.layers.dense(inputs=user_features, units=self.config.HIDDEN_LAYER_SIZE,
+                             activation=tf.nn.relu, kernel_initializer=self.init_w,
+                             bias_initializer=self.init_b, trainable=trainable,
+                             name="u_features")
+
+        return p_features, n_features, user_features
+
+
+
+    def __build_model(self, positive_states_id, negative_states_id, user_features, trainable, scope):
+
+        with tf.variable_scope(scope):
+          with tf.variable_scope('embedding'):
+
+
+            items_embedding = tf.get_variable(shape=[self.config.ITEM_SIZE, self.config.EMBEDDING_SIZE],
+                                                   dtype=tf.float32, trainable=trainable, initializer=self.init_w,
+                                                   name="items_embedding")
+
+          with tf.variable_scope('critic_net'):
+            p_features, n_features, user_features = self.__build_state_net(positive_states_id, negative_states_id, user_features, items_embedding, trainable, 'critic_net')
+
+
+            discrimitor_features = tf.concat([p_features, n_features], axis=-1)
+            
+            discrimitor_features = tf.layers.dense(inputs=discrimitor_features, units=self.config.HIDDEN_LAYER_SIZE,
+                                           activation=None, kernel_initializer=self.init_w,
+                                           bias_initializer=self.init_b, trainable=trainable,
+                                           name="user_features_layer")
+
+            user_scores = tf.layers.dense(inputs=discrimitor_features, units= self.user_size,
+                               activation=tf.nn.softmax, kernel_initializer=self.init_w,
+                               bias_initializer=self.init_b, trainable=trainable,
+                               name="user_net")
+
+
+            mix_features = tf.concat([p_features, n_features, user_features], axis=-1)
+
+            mix_features = tf.layers.dense(inputs=mix_features, units=self.config.HIDDEN_LAYER_SIZE,
+                                           activation=None, kernel_initializer=self.init_w,
+                                           bias_initializer=self.init_b, trainable=trainable,
+                                           name="mixed_features_layer")
+
+            mix_features = tf.nn.relu(mix_features)
+
+
+            q_value = tf.layers.dense(inputs=mix_features, units=self.config.ITEM_SIZE,
+                               activation=None, kernel_initializer=self.init_w,
+                               bias_initializer=self.init_b, trainable=trainable,
+                               name="qnet")
+
+
+
+
+        return q_value, user_scores
+
+
+
+    def choose_batch_action(self, p_states_id, n_states_id, ban_items, users):
+        actions = []
+
+        q_value = self.sess.run(self.eval_q_value,
+                                feed_dict={
+                                    self.positive_state: np.reshape(p_states_id, [-1, self.config.HISTORY_SIZE]),
+                                    self.negative_state: np.reshape(n_states_id, [-1, self.config.HISTORY_SIZE]),
+                                    self.userID: users
+                                    })
+        assert np.isnan(q_value).sum() == 0 
+        for _i in range(len(p_states_id)):
+            q_value[_i][np.asarray(ban_items[_i]) == 0.0] = -np.inf
+            action = np.argmax(q_value[_i])
+            actions.append(action)
+
+        return actions
+
+
+
+
+
+    def get_next_all_action_q(self, p_state_next, n_state_next, ban_next_items, users):
+
+        ban_next_items = np.asarray(ban_next_items)
+        next_q = self.sess.run(self.target_q_value, feed_dict={self.positive_state: p_state_next,
+                                                               self.negative_state: n_state_next,
+                                                               self.userID: users
+                                                               })
+        next_q[ban_next_items == 0.0] = -np.inf
+        next_q = np.max(next_q, axis=-1)
+
+        return next_q
+
+
+
+
+
+
+    def learn_discrimitor(self,  p_states_id, n_states_id, users):
+        actions = []
+
+        ul, _ = self.sess.run([self.user_loss, self.user_train_op],
+                                feed_dict={
+                                    self.positive_state: np.reshape(p_states_id, [-1, self.config.HISTORY_SIZE]),
+                                    self.negative_state: np.reshape(n_states_id, [-1, self.config.HISTORY_SIZE]),
+                                    self.userID: users
+                                    })
+
+
+        return ul
+
+
+
+
+    def pred_user(self,  p_states_id, n_states_id):
+        users = []
+
+        user_scores = self.sess.run(self.user_scores,
+                                feed_dict={
+                                    self.positive_state: np.reshape(p_states_id, [-1, self.config.HISTORY_SIZE]),
+                                    self.negative_state: np.reshape(n_states_id, [-1, self.config.HISTORY_SIZE])
+                                    })
+
+        assert np.isnan(user_scores).sum() == 0 
+
+        for _i in range(len(p_states_id)):
+
+            user = np.argmax(user_scores[_i])
+            users.append(user)
+
+        return users, user_scores
+
+
+
+
+    def learn_critic(self,  p_state, n_state, p_state_next, n_state_next, action, ban_items, ban_next_items, reward, users):
+
+
+        target_q = self.get_next_all_action_q(p_state_next, n_state_next, ban_next_items, users)
+        assert np.isnan(target_q).sum() == 0 
+        assert np.isnan(reward).sum() == 0 
+
+        target = (reward + self.config.DISCOUNT_FACTOR * target_q).reshape([-1,1])
+        assert np.isnan(target).sum() == 0 
+
+        _, loss, step = self.sess.run([self.critic_train_op, self.critic_loss, self.global_step], feed_dict={self.positive_state: p_state,
+                                                                self.negative_state: n_state,
+                                                                self.action: action.reshape([-1,1]),
+                                                                self.target_q: target,
+                                                                self.userID: users
+                                                               })
+        
+        return step, loss
+
+
+
+
+
+
+    def learn_acnet(self, p_state, n_state, p_state_next, n_state_next, action, ban_items, ban_next_items, reward, users):
+      step, loss = self.learn_critic(p_state, n_state, p_state_next, n_state_next, action, ban_items, ban_next_items, reward, users)
+
+      if step % self.config.UPDATE_LIMIT == 0:
+          self.update_target_params()
+      return loss
+
+
+    def update_target_params(self):
+        self.sess.run(self.assign_ops)
+
+# 2. 在 DQNU 类中添加一个新的成员函数（建议放在 update_target_params 后面）：
+    def save_model(self, save_path):
+        self.saver.save(self.sess, save_path, global_step=self.global_step)
+        print(f"Model saved to {save_path}")
+
