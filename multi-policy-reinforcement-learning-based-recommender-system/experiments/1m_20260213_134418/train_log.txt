@@ -1,0 +1,75 @@
+Episode_count: 5000
+PID: 1526912
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 5000 highest_hit: 0.028017241379310345
+avg test hit: 0.028017241379310345
+avg train loss: 0.7302648425102234
+avg test phase1 hit: 0.027413793103448273
+avg test phase2 hit: 0.028620689655172418
+avg test ndcg: 0.027343597672201046
+avg test sum reward: -19.04551724137931
+Time: 2026-02-13 13:45:24
+!!! Best Model Saved !!!
+--------------------------------------------------
+Episode_count: 10000
+PID: 1526912
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 10000 highest_hit: 0.175
+avg test hit: 0.175
+avg train loss: 0.2542388141155243
+avg test phase1 hit: 0.31724137931034485
+avg test phase2 hit: 0.032758620689655175
+avg test ndcg: 0.2525014206762127
+avg test sum reward: -13.741379310344827
+Time: 2026-02-13 13:46:27
+!!! Best Model Saved !!!
+--------------------------------------------------
+Episode_count: 15000
+PID: 1526912
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 15000 highest_hit: 0.2927586206896552
+avg test hit: 0.2927586206896552
+avg train loss: 0.3892616331577301
+avg test phase1 hit: 0.41568965517241385
+avg test phase2 hit: 0.16982758620689656
+avg test ndcg: 0.3459359809222815
+avg test sum reward: -9.477241379310344
+Time: 2026-02-13 13:47:20
+!!! Best Model Saved !!!
+--------------------------------------------------
+Episode_count: 20000
+PID: 1526912
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 20000 highest_hit: 0.3632758620689655
+avg test hit: 0.3632758620689655
+avg train loss: 0.5026920437812805
+avg test phase1 hit: 0.4143103448275862
+avg test phase2 hit: 0.3122413793103448
+avg test ndcg: 0.39341906335190663
+avg test sum reward: -7.11655172413793
+Time: 2026-02-13 13:48:15
+!!! Best Model Saved !!!
+--------------------------------------------------
+Episode_count: 25000
+PID: 1526912
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 20000 highest_hit: 0.3632758620689655
+avg test hit: 0.35422413793103447
+avg train loss: 0.607562243938446
+avg test phase1 hit: 0.42913793103448283
+avg test phase2 hit: 0.2793103448275862
+avg test ndcg: 0.3881229050362133
+avg test sum reward: -7.448275862068965
+Time: 2026-02-13 13:49:12
+
+--------------------------------------------------

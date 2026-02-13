@@ -1,0 +1,465 @@
+Episode_count: 5000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 5000 highest_hit: 0.05853448275862069
+avg test hit: 0.05853448275862069
+avg train loss: 0.8267004489898682
+avg test phase1 hit: 0.07172413793103448
+avg test phase2 hit: 0.0453448275862069
+avg test ndcg: 0.1032666235627136
+avg test sum reward: -17.946206896551722
+Time: 2026-02-13 14:44:48
+!!! Best Model Saved !!!
+--------------------------------------------------
+Episode_count: 10000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 10000 highest_hit: 0.0988793103448276
+avg test hit: 0.0988793103448276
+avg train loss: 0.31469467282295227
+avg test phase1 hit: 0.12103448275862069
+avg test phase2 hit: 0.07672413793103448
+avg test ndcg: 0.1432909100498278
+avg test sum reward: -16.463448275862067
+Time: 2026-02-13 14:45:51
+!!! Best Model Saved !!!
+--------------------------------------------------
+Episode_count: 15000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 15000 highest_hit: 0.21793103448275863
+avg test hit: 0.21793103448275863
+avg train loss: 0.30362799763679504
+avg test phase1 hit: 0.3510344827586207
+avg test phase2 hit: 0.08482758620689654
+avg test ndcg: 0.2876468678580762
+avg test sum reward: -12.217241379310344
+Time: 2026-02-13 14:46:52
+!!! Best Model Saved !!!
+--------------------------------------------------
+Episode_count: 20000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 20000 highest_hit: 0.37525862068965515
+avg test hit: 0.37525862068965515
+avg train loss: 0.47271692752838135
+avg test phase1 hit: 0.4524137931034483
+avg test phase2 hit: 0.2981034482758621
+avg test ndcg: 0.41305646439130184
+avg test sum reward: -6.655862068965517
+Time: 2026-02-13 14:47:50
+!!! Best Model Saved !!!
+--------------------------------------------------
+Episode_count: 25000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 25000 highest_hit: 0.3871551724137931
+avg test hit: 0.3871551724137931
+avg train loss: 0.6596949696540833
+avg test phase1 hit: 0.45103448275862074
+avg test phase2 hit: 0.3232758620689655
+avg test ndcg: 0.4184578835507315
+avg test sum reward: -6.113793103448276
+Time: 2026-02-13 14:48:48
+!!! Best Model Saved !!!
+--------------------------------------------------
+Episode_count: 30000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 25000 highest_hit: 0.3871551724137931
+avg test hit: 0.37913793103448273
+avg train loss: 0.7564915418624878
+avg test phase1 hit: 0.4543103448275862
+avg test phase2 hit: 0.3039655172413793
+avg test ndcg: 0.41461980385607655
+avg test sum reward: -6.379310344827586
+Time: 2026-02-13 14:49:53
+
+--------------------------------------------------
+Episode_count: 35000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 35000 highest_hit: 0.4138793103448276
+avg test hit: 0.4138793103448276
+avg train loss: 0.81429123878479
+avg test phase1 hit: 0.4703448275862068
+avg test phase2 hit: 0.3574137931034483
+avg test ndcg: 0.44220111690464625
+avg test sum reward: -5.226206896551724
+Time: 2026-02-13 14:50:54
+!!! Best Model Saved !!!
+--------------------------------------------------
+Episode_count: 40000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 35000 highest_hit: 0.4138793103448276
+avg test hit: 0.405948275862069
+avg train loss: 0.8997247219085693
+avg test phase1 hit: 0.4477586206896553
+avg test phase2 hit: 0.3641379310344828
+avg test ndcg: 0.43124736334035896
+avg test sum reward: -5.464827586206896
+Time: 2026-02-13 14:51:53
+
+--------------------------------------------------
+Episode_count: 45000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 35000 highest_hit: 0.4138793103448276
+avg test hit: 0.39655172413793105
+avg train loss: 0.9856487512588501
+avg test phase1 hit: 0.45965517241379306
+avg test phase2 hit: 0.333448275862069
+avg test ndcg: 0.42757629011946674
+avg test sum reward: -5.76551724137931
+Time: 2026-02-13 14:52:50
+
+--------------------------------------------------
+Episode_count: 50000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 35000 highest_hit: 0.4138793103448276
+avg test hit: 0.4081896551724138
+avg train loss: 1.0637401342391968
+avg test phase1 hit: 0.4531034482758621
+avg test phase2 hit: 0.36327586206896556
+avg test ndcg: 0.42495368483057244
+avg test sum reward: -5.373103448275862
+Time: 2026-02-13 14:53:56
+
+--------------------------------------------------
+Episode_count: 55000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 35000 highest_hit: 0.4138793103448276
+avg test hit: 0.4047413793103448
+avg train loss: 1.0943020582199097
+avg test phase1 hit: 0.4613793103448276
+avg test phase2 hit: 0.3481034482758621
+avg test ndcg: 0.4318311070068146
+avg test sum reward: -5.483448275862068
+Time: 2026-02-13 14:54:55
+
+--------------------------------------------------
+Episode_count: 60000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 60000 highest_hit: 0.4156034482758621
+avg test hit: 0.4156034482758621
+avg train loss: 1.1581523418426514
+avg test phase1 hit: 0.47896551724137926
+avg test phase2 hit: 0.3522413793103448
+avg test ndcg: 0.4416499793414661
+avg test sum reward: -5.162068965517242
+Time: 2026-02-13 14:55:58
+!!! Best Model Saved !!!
+--------------------------------------------------
+Episode_count: 65000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 60000 highest_hit: 0.4156034482758621
+avg test hit: 0.4097413793103448
+avg train loss: 1.1903703212738037
+avg test phase1 hit: 0.45379310344827595
+avg test phase2 hit: 0.3656896551724138
+avg test ndcg: 0.43380151502062
+avg test sum reward: -5.2682758620689665
+Time: 2026-02-13 14:57:02
+
+--------------------------------------------------
+Episode_count: 70000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 70000 highest_hit: 0.4305172413793103
+avg test hit: 0.4305172413793103
+avg train loss: 1.2868237495422363
+avg test phase1 hit: 0.4706896551724138
+avg test phase2 hit: 0.3903448275862069
+avg test ndcg: 0.4514714740480609
+avg test sum reward: -4.5537931034482755
+Time: 2026-02-13 14:58:05
+!!! Best Model Saved !!!
+--------------------------------------------------
+Episode_count: 75000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 75000 highest_hit: 0.43482758620689654
+avg test hit: 0.43482758620689654
+avg train loss: 1.3400452136993408
+avg test phase1 hit: 0.4889655172413794
+avg test phase2 hit: 0.3806896551724138
+avg test ndcg: 0.45870441077770435
+avg test sum reward: -4.407586206896552
+Time: 2026-02-13 14:59:06
+!!! Best Model Saved !!!
+--------------------------------------------------
+Episode_count: 80000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 75000 highest_hit: 0.43482758620689654
+avg test hit: 0.42172413793103447
+avg train loss: 1.3732606172561646
+avg test phase1 hit: 0.4708620689655173
+avg test phase2 hit: 0.3725862068965517
+avg test ndcg: 0.44540107565099524
+avg test sum reward: -4.924137931034482
+Time: 2026-02-13 15:00:09
+
+--------------------------------------------------
+Episode_count: 85000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 75000 highest_hit: 0.43482758620689654
+avg test hit: 0.4254310344827586
+avg train loss: 1.3986300230026245
+avg test phase1 hit: 0.4982758620689655
+avg test phase2 hit: 0.35258620689655173
+avg test ndcg: 0.4531985763913103
+avg test sum reward: -4.7268965517241375
+Time: 2026-02-13 15:01:03
+
+--------------------------------------------------
+Episode_count: 90000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 75000 highest_hit: 0.43482758620689654
+avg test hit: 0.4228448275862069
+avg train loss: 1.3216372728347778
+avg test phase1 hit: 0.47827586206896555
+avg test phase2 hit: 0.3674137931034483
+avg test ndcg: 0.44696693615715344
+avg test sum reward: -4.871724137931034
+Time: 2026-02-13 15:01:58
+
+--------------------------------------------------
+Episode_count: 95000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 75000 highest_hit: 0.43482758620689654
+avg test hit: 0.42767241379310345
+avg train loss: 1.438765048980713
+avg test phase1 hit: 0.48413793103448277
+avg test phase2 hit: 0.3712068965517242
+avg test ndcg: 0.45332036908224166
+avg test sum reward: -4.691724137931034
+Time: 2026-02-13 15:02:56
+
+--------------------------------------------------
+Episode_count: 100000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 75000 highest_hit: 0.43482758620689654
+avg test hit: 0.3989655172413793
+avg train loss: 1.4821994304656982
+avg test phase1 hit: 0.44396551724137934
+avg test phase2 hit: 0.3539655172413793
+avg test ndcg: 0.4252335972619833
+avg test sum reward: -5.691724137931034
+Time: 2026-02-13 15:03:49
+
+--------------------------------------------------
+Episode_count: 105000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 75000 highest_hit: 0.43482758620689654
+avg test hit: 0.4343103448275862
+avg train loss: 1.5294431447982788
+avg test phase1 hit: 0.49224137931034484
+avg test phase2 hit: 0.37637931034482763
+avg test ndcg: 0.4585121221871023
+avg test sum reward: -4.383448275862069
+Time: 2026-02-13 15:04:55
+
+--------------------------------------------------
+Episode_count: 110000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 110000 highest_hit: 0.44112068965517237
+avg test hit: 0.44112068965517237
+avg train loss: 1.5499638319015503
+avg test phase1 hit: 0.4970689655172414
+avg test phase2 hit: 0.3851724137931035
+avg test ndcg: 0.46513436068135056
+avg test sum reward: -4.189655172413793
+Time: 2026-02-13 15:06:00
+!!! Best Model Saved !!!
+--------------------------------------------------
+Episode_count: 115000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 110000 highest_hit: 0.44112068965517237
+avg test hit: 0.4408620689655172
+avg train loss: 1.572361707687378
+avg test phase1 hit: 0.496896551724138
+avg test phase2 hit: 0.38482758620689655
+avg test ndcg: 0.464615459859626
+avg test sum reward: -4.222758620689655
+Time: 2026-02-13 15:07:02
+
+--------------------------------------------------
+Episode_count: 120000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 110000 highest_hit: 0.44112068965517237
+avg test hit: 0.42853448275862066
+avg train loss: 1.5530927181243896
+avg test phase1 hit: 0.46965517241379307
+avg test phase2 hit: 0.38741379310344826
+avg test ndcg: 0.4507841741001961
+avg test sum reward: -4.63103448275862
+Time: 2026-02-13 15:08:04
+
+--------------------------------------------------
+Episode_count: 125000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 110000 highest_hit: 0.44112068965517237
+avg test hit: 0.43715517241379315
+avg train loss: 1.542225956916809
+avg test phase1 hit: 0.493448275862069
+avg test phase2 hit: 0.3808620689655172
+avg test ndcg: 0.46011083531129204
+avg test sum reward: -4.3455172413793095
+Time: 2026-02-13 15:09:06
+
+--------------------------------------------------
+Episode_count: 130000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 110000 highest_hit: 0.44112068965517237
+avg test hit: 0.4330172413793103
+avg train loss: 1.5999772548675537
+avg test phase1 hit: 0.4774137931034482
+avg test phase2 hit: 0.38862068965517244
+avg test ndcg: 0.4547096461850689
+avg test sum reward: -4.458620689655173
+Time: 2026-02-13 15:10:13
+
+--------------------------------------------------
+Episode_count: 135000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 110000 highest_hit: 0.44112068965517237
+avg test hit: 0.4392241379310345
+avg train loss: 1.5946396589279175
+avg test phase1 hit: 0.47896551724137926
+avg test phase2 hit: 0.39948275862068966
+avg test ndcg: 0.4589579844745844
+avg test sum reward: -4.233793103448276
+Time: 2026-02-13 15:11:16
+
+--------------------------------------------------
+Episode_count: 140000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 110000 highest_hit: 0.44112068965517237
+avg test hit: 0.439396551724138
+avg train loss: 1.6137322187423706
+avg test phase1 hit: 0.49051724137931035
+avg test phase2 hit: 0.3882758620689655
+avg test ndcg: 0.4626833563099414
+avg test sum reward: -4.255172413793104
+Time: 2026-02-13 15:12:15
+
+--------------------------------------------------
+Episode_count: 145000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 110000 highest_hit: 0.44112068965517237
+avg test hit: 0.43887931034482763
+avg train loss: 1.6439614295959473
+avg test phase1 hit: 0.48655172413793113
+avg test phase2 hit: 0.3912068965517242
+avg test ndcg: 0.46105765212562716
+avg test sum reward: -4.289655172413793
+Time: 2026-02-13 15:13:17
+
+--------------------------------------------------
+Episode_count: 150000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 150000 highest_hit: 0.4462931034482759
+avg test hit: 0.4462931034482759
+avg train loss: 1.6923389434814453
+avg test phase1 hit: 0.486551724137931
+avg test phase2 hit: 0.4060344827586207
+avg test ndcg: 0.4659484334969422
+avg test sum reward: -3.995172413793104
+Time: 2026-02-13 15:14:21
+!!! Best Model Saved !!!
+--------------------------------------------------
+Episode_count: 155000
+PID: 1822772
+MAX_STEPS: 20
+item: 3707
+dataset: 1m
+highest_epoch: 155000 highest_hit: 0.45336206896551723
+avg test hit: 0.45336206896551723
+avg train loss: 1.700977087020874
+avg test phase1 hit: 0.5027586206896553
+avg test phase2 hit: 0.40396551724137936
+avg test ndcg: 0.4738833332907757
+avg test sum reward: -3.782758620689655
+Time: 2026-02-13 15:15:28
+!!! Best Model Saved !!!
+--------------------------------------------------

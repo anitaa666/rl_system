@@ -82,6 +82,7 @@ class DQNU(object):
             
             self.user_train_op = tf.train.AdamOptimizer(learning_rate=self.config.LR , epsilon=1e-8).minimize(loss=self.user_loss,
                                                                                                         global_step=self.global_step)
+            self.saver = tf.train.Saver(max_to_keep=5)
             
 
 
@@ -333,7 +334,10 @@ class DQNU(object):
     def update_target_params(self):
         self.sess.run(self.assign_ops)
 
-
+# 2. 在 DQNU 类中添加一个新的成员函数（建议放在 update_target_params 后面）：
+    def save_model(self, save_path):
+        self.saver.save(self.sess, save_path, global_step=self.global_step)
+        print(f"Model saved to {save_path}")
 
 
 

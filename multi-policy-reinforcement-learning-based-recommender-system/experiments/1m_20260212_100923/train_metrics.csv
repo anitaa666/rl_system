@@ -99,3 +99,28 @@ episode,avg_test_hit,phase1_hit,phase2_hit,avg_ndcg,train_loss
 490000,0.4546,0.4915,0.4177,0.4674,0.6829
 495000,0.4542,0.4968,0.4116,0.4676,0.6794
 500000,0.4539,0.4832,0.4245,0.4656,0.6811
+Episode: 499000, Batch Reward: 0.0280, Info Gain: 0.0000
+Episode: 499100, Batch Reward: -0.2952, Info Gain: 0.0000
+Episode: 499200, Batch Reward: 0.2921, Info Gain: 0.0000
+Episode: 499300, Batch Reward: -0.2176, Info Gain: 0.0000
+Episode: 499400, Batch Reward: -0.1928, Info Gain: -0.0566
+Episode: 499500, Batch Reward: -0.2600, Info Gain: 0.0000
+Episode: 499600, Batch Reward: -0.2857, Info Gain: 0.0000
+Episode: 499700, Batch Reward: -0.1163, Info Gain: 0.0000
+Episode: 499800, Batch Reward: -0.1983, Info Gain: 0.0000
+Episode: 499900, Batch Reward: -0.5300, Info Gain: 0.0000
+Episode: 500000, Batch Reward: -0.5752, Info Gain: -0.1046
+Episode_count: 500000
+PID,  2236965
+MAX_STEPS 20
+item 3707
+dataset: 1m
+highest_epoch: 455000 highest_hit:  0.45782258064516135
+avg test hit: 0.45387096774193547
+avg train loss: 0.6810874
+avg test phase1 hit: 0.48322580645161295
+avg test phase2 hit: 0.42451612903225805
+avg test ndcg: 0.4656155574414313
+avg test sum reward: -3.7664516129032255
+2026-02-12 11:59:41
+--- Metrics saved to ../experiments/1m_20260212_100923/train_metrics.csv ---wo

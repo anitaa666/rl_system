@@ -322,7 +322,34 @@ def train(utils, cfg):
     
 
     evaluate_point = 5000
+# ... (前文代码)
+    evaluate_point = 5000
 
+    import os
+    # 1. 创建实验文件夹
+    timestamp = time.strftime("%Y%m%d_%H%M%S", time.localtime())
+    exp_dir = "../experiments/" + cfg.DATA_SET + "_" + timestamp
+    if not os.path.exists(exp_dir):
+        os.makedirs(exp_dir)
+    
+    # 【必须补上这几行，否则存模型会报错】
+    ckpt_dir = os.path.join(exp_dir, "checkpoints")
+    if not os.path.exists(ckpt_dir):
+        os.makedirs(ckpt_dir)
+
+    # 2. 定义两个文件的路径
+    log_file_path = os.path.join(exp_dir, "train_log.txt")  # <--- 注意这里叫 log_file_path
+    csv_file_path = os.path.join(exp_dir, "train_metrics.csv")
+    
+    print("Logs will be saved to:", log_file_path)
+    print("CSV will be saved to:", csv_file_path)
+
+    # 3. 先给 CSV 写一行表头
+    with open(csv_file_path, "w") as f:
+        f.write("episode,avg_test_hit,phase1_hit,phase2_hit,avg_ndcg,train_loss\n")
+
+
+ 
     episode_count = 0
     np.random.shuffle(train_user_id)
     t_train_user_id = train_user_id
@@ -540,41 +567,70 @@ def train(utils, cfg):
             test_rhs = test_lhs + user_batch_size
 
 
-        if highest_hit < np.mean(test_user_total_hit):
-
-            highest_hit = np.mean(test_user_total_hit)
-            highest_epoch = episode_count
-
-
-        print("Episode_count:", episode_count)
-        print ('PID, ', os.getpid())
-        print ('MAX_STEPS', cfg.MAX_STEPS)
-        print ('item', cfg.ITEM_SIZE)
-        print("dataset:", cfg.DATA_SET)
-        print("highest_epoch:", highest_epoch, "highest_hit: ", highest_hit)
-        print("avg test hit:", np.mean(test_user_total_hit))
-        print ('avg train loss:', np.mean(train_loss))
-        print("avg test phase1 hit:", np.mean(test_user_phase1_hit))
-        print("avg test phase2 hit:", np.mean(test_user_phase2_hit))
-        print ("avg test ndcg:", np.mean(test_total_ndcg))
-        print ("avg test sum reward:", np.mean(test_rewards))
+# ================= 【最终完整修改版】 =================
+        # 1. 准备要输出的数据变量
+        current_hit = np.mean(test_user_total_hit)
         
-        print (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) )
-# main.py 约 396 行打印完毕后
-# 1. 记录到 CSV
-        logger.log_metrics(
-            episode_count, 
-            np.mean(test_user_total_hit), 
-            np.mean(test_user_phase1_hit), 
-            np.mean(test_user_phase2_hit), 
-            np.mean(test_total_ndcg), 
-            np.mean(train_loss)
+        # 为了防止 train_loss 为空列表导致报错，加个判断
+        current_loss = np.mean(train_loss) if train_loss else 0.0 
+        
+        save_msg = ""
+        
+        # 2. 判断是否是最佳模型，如果是则保存
+        if highest_hit < current_hit:
+            highest_hit = current_hit
+            highest_epoch = episode_count
+            
+            # 保存模型
+            save_path = os.path.join(ckpt_dir, "model.ckpt")
+            amodel.saver.save(amodel.sess, save_path, global_step=amodel.global_step)
+            save_msg = "!!! Best Model Saved !!!"
+
+        # 3. 拼接 TXT 日志内容 (保持你原有的格式)
+        log_content = (
+            "Episode_count: {}\n".format(episode_count) +
+            "PID: {}\n".format(os.getpid()) +
+            "MAX_STEPS: {}\n".format(cfg.MAX_STEPS) +
+            "item: {}\n".format(cfg.ITEM_SIZE) +
+            "dataset: {}\n".format(cfg.DATA_SET) +
+            "highest_epoch: {} highest_hit: {}\n".format(highest_epoch, highest_hit) +
+            "avg test hit: {}\n".format(current_hit) +
+            "avg train loss: {}\n".format(current_loss) +
+            "avg test phase1 hit: {}\n".format(np.mean(test_user_phase1_hit)) +
+            "avg test phase2 hit: {}\n".format(np.mean(test_user_phase2_hit)) +
+            "avg test ndcg: {}\n".format(np.mean(test_total_ndcg)) +
+            "avg test sum reward: {}\n".format(np.mean(test_rewards)) +
+            "Time: {}\n".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())) +
+            "{}\n".format(save_msg) + 
+            "--------------------------------------------------\n"
         )
 
-    # 2. 如果当前命中率是最高的，保存模型
-    if highest_hit <= np.mean(test_user_total_hit):
-        logger.save_model(amodel.sess, episode_count)
-    amodel.update_target_params()
+ # ... (前文拼接 log_content 的代码)
+
+        # 4. 拼接 CSV 数据行
+        csv_line = "{},{},{},{},{},{}\n".format(
+            episode_count,
+            current_hit,
+            np.mean(test_user_phase1_hit),
+            np.mean(test_user_phase2_hit),
+            np.mean(test_total_ndcg),
+            current_loss
+        )
+
+        # 5. 执行输出和写入
+        print(log_content) # 打印到屏幕
+        
+        # 写入 txt 日志 【修改点：把 log_path 改为 log_file_path】
+        with open(log_file_path, "a") as f:  
+            f.write(log_content)
+            
+        # 写入 csv 表格
+        with open(csv_file_path, "a") as f:
+            f.write(csv_line)
+            
+        # ... (后续 update_target_params 代码)
+
+        amodel.update_target_params()
 
 
 
